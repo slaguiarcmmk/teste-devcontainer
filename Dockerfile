@@ -1,7 +1,4 @@
 FROM mcr.microsoft.com/devcontainers/javascript-node:20
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends bash \
-    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
 

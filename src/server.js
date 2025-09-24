@@ -1,22 +1,27 @@
 const express = require('express');
+
+const swaggerUi = require('swagger-ui-express');
 const config = require('./config');
 const clientsRouter = require('./routes/clients');
-const basicAuth = require('./middleware/basicAuth');
-const { ensureDefaultCredential } = require('./services/credentialService');
 const { closePool } = require('./db/sqlClient');
-const { closeClient } = require('./db/mongoClient');
+const swaggerDocument = require('./docs/swagger');
 
-async function createApp() {
-  await ensureDefaultCredential();
-
+function createApp() {
   const app = express();
   app.use(express.json());
+
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.get('/docs.json', (req, res) => {
+    res.json(swaggerDocument);
+  });
+
 
   app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
   });
 
-  app.use('/clients', basicAuth, clientsRouter);
+  app.use('/clients', clientsRouter);
+
 
   app.use((err, req, res, next) => {
     // eslint-disable-next-line no-console
@@ -28,7 +33,7 @@ async function createApp() {
 }
 
 async function start() {
-  const app = await createApp();
+  const app = createApp();
   const server = app.listen(config.port, () => {
     // eslint-disable-next-line no-console
     console.log(`API listening on port ${config.port}`);
@@ -39,7 +44,6 @@ async function start() {
     console.log('Shutting down gracefully...');
     server.close(async () => {
       await closePool();
-      await closeClient();
       process.exit(0);
     });
   };

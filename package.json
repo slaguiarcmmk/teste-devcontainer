@@ -1,7 +1,8 @@
 {
-  "name": "sqlserver-mongo-api-template",
+  "name": "sqlserver-api-template",
   "version": "1.0.0",
-  "description": "Template Node.js REST API that queries SQL Server and uses MongoDB for credential storage.",
+  "description": "Template Node.js REST API that queries SQL Server and exposes Swagger documentation.",
+
   "type": "commonjs",
   "main": "src/server.js",
   "scripts": {
@@ -12,7 +13,8 @@
     "node",
     "express",
     "sqlserver",
-    "mongodb",
+    "swagger",
+
     "devcontainer"
   ],
   "author": "",
@@ -20,8 +22,9 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mongodb": "^6.6.2",
-    "mssql": "^10.0.2"
+
+    "mssql": "^10.0.2",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"

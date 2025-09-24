@@ -7,4 +7,3 @@ Dockerfile*
 .gitignore
 README.md
 sql
-mongo-init
