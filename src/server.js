@@ -1,4 +1,5 @@
 const express = require('express');
+
 const swaggerUi = require('swagger-ui-express');
 const config = require('./config');
 const clientsRouter = require('./routes/clients');
@@ -14,11 +15,13 @@ function createApp() {
     res.json(swaggerDocument);
   });
 
+
   app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
   });
 
   app.use('/clients', clientsRouter);
+
 
   app.use((err, req, res, next) => {
     // eslint-disable-next-line no-console

@@ -20,6 +20,7 @@ e a tabela `Clients` preenchida com dados de exemplo.
   remoto
 
 ## Como começar
+=======
 
 1. Copie o arquivo `.env.example` para `.env` e ajuste as variáveis caso necessário.
 
@@ -55,6 +56,7 @@ e a tabela `Clients` preenchida com dados de exemplo.
 ## Utilizando Dev Containers
 
 1. Abra o projeto no VS Code.
+
 2. Pressione `F1` e selecione **Dev Containers: Reopen in Container**.
 3. O VS Code utilizará o `docker-compose.yml`, subindo automaticamente `sqlserver` e `api`.
 4. Dentro do container, os scripts `npm run dev` (hot reload via nodemon) e `npm start` estão disponíveis.
@@ -64,34 +66,14 @@ e a tabela `Clients` preenchida com dados de exemplo.
 - `npm run dev`: executa a API com `nodemon` para recarregamento automático.
 - `npm start`: executa a API em modo padrão.
 
+
 ## Banco de dados SQL Server
 
 O script `sql/init.sql` cria a base `ClientCatalog`, a tabela `Clients` e insere três registros de
 exemplo. Ajuste o script conforme necessário para o seu domínio.
 
+
 ## Estrutura de pastas
 
-```
-.
-├── .devcontainer/
-│   └── devcontainer.json
-├── docker-compose.yml
-├── Dockerfile
-├── src/
-│   ├── config.js
-│   ├── server.js
-│   ├── routes/
-│   │   └── clients.js
-│   ├── db/
-│   │   └── sqlClient.js
-│   └── docs/
-│       └── swagger.js
-├── sql/
-│   ├── entrypoint.sh
-│   └── init.sql
-├── .env.example
-├── .gitignore
-└── README.md
-```
 
-Sinta-se à vontade para expandir o template adicionando testes, pipelines de CI/CD ou novas rotas na API.
+

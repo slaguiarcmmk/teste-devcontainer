@@ -2,6 +2,7 @@
   "name": "sqlserver-api-template",
   "version": "1.0.0",
   "description": "Template Node.js REST API that queries SQL Server and exposes Swagger documentation.",
+
   "type": "commonjs",
   "main": "src/server.js",
   "scripts": {
@@ -13,6 +14,7 @@
     "express",
     "sqlserver",
     "swagger",
+
     "devcontainer"
   ],
   "author": "",
@@ -20,6 +22,7 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+
     "mssql": "^10.0.2",
     "swagger-ui-express": "^5.0.0"
   },

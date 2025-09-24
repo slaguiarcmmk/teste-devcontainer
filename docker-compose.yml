@@ -43,7 +43,7 @@ services:
       interval: 10s
       timeout: 3s
       retries: 10
-    entrypoint: ["/bin/bash", "/usr/src/sql/entrypoint.sh"]
+   entrypoint: ["/bin/bash", "/usr/src/sql/entrypoint.sh"]
 
 volumes:
   sql-data:
