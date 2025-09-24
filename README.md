@@ -1,79 +1,97 @@
-# Node.js + SQL Server Dev Container Template
+# API de Clientes com Node.js 22 e SQL Server 2022
 
-Este repositório entrega um template completo para desenvolvimento de uma API REST em Node.js
-utilizando SQL Server como banco de dados. Todo o ambiente é orquestrado via Docker Compose e
-preparado para uso em Dev Containers, incluindo documentação interativa da API com Swagger UI.
+Este projeto recria do zero uma aplicação com:
 
-## Componentes
+- **SQL Server 2022 Developer** executando em Linux;
+- **Node.js 22** com Express para expor uma API REST;
+- **Swagger UI** disponível para documentação e testes da API.
 
-- **Node.js API** (`api`): aplicação Express com endpoint `GET /clients` que lê os registros da
-tabela `Clients` no SQL Server. A rota `/docs` disponibiliza a documentação OpenAPI/Swagger.
-- **SQL Server** (`sqlserver`): banco com licença Developer, provisionado com o banco `ClientCatalog`
-e a tabela `Clients` preenchida com dados de exemplo.
-- **Dev Container** (`.devcontainer/devcontainer.json`): conecta-se ao serviço `api` e provisiona as
-  dependências automaticamente.
+A API permite consultar os clientes cadastrados no banco SQL Server através do endpoint `GET /clients`.
 
 ## Pré-requisitos
 
-- Docker e Docker Compose
-- (Opcional) Visual Studio Code com a extensão **Dev Containers** para trabalhar dentro do ambiente
-  remoto
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-## Como começar
-=======
+## Como executar
 
-1. Copie o arquivo `.env.example` para `.env` e ajuste as variáveis caso necessário.
-
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Suba o ambiente completo com Docker Compose:
+1. Clone este repositório e, no diretório raiz, execute:
 
    ```bash
    docker compose up --build
    ```
 
-   A primeira execução fará o download das imagens e criará a tabela `Clients` no SQL Server.
+   O comando cria três serviços:
 
-3. Após os containers estarem em execução, explore a API:
+   - `sqlserver`: SQL Server 2022 Developer Edition em Linux;
+   - `db-init`: container auxiliar que aplica o script `sql/init.sql` para criar a base `ClientesDb`, a tabela `Clientes` e dados de exemplo;
+   - `api`: aplicação Node.js 22 que expõe a API.
 
-   - Consulte a lista de clientes:
+2. Aguarde até que os logs indiquem que a API está ouvindo na porta 3000 (`Servidor iniciado na porta 3000`).
 
-     ```bash
-     curl http://localhost:3000/clients
-     ```
+3. Acesse os recursos disponíveis:
 
-   - Abra a documentação Swagger UI em `http://localhost:3000/docs` ou consulte o documento JSON em
-     `http://localhost:3000/docs.json`.
+   - **API**: `http://localhost:3000/clients`
+   - **Documentação Swagger**: `http://localhost:3000/docs`
+   - **Health check**: `http://localhost:3000/health`
 
-4. Para encerrar os serviços:
+4. Para encerrar, pressione `Ctrl+C` e execute `docker compose down` para remover os containers.
 
-   ```bash
-   docker compose down
-   ```
+## Configuração
 
-## Utilizando Dev Containers
+As variáveis de ambiente relevantes já estão definidas no `docker-compose.yml`. Caso precise alterar a senha ou o nome do banco, ajuste os campos `DB_PASSWORD` e `DB_NAME` nos serviços `api` e `db-init`, além de `MSSQL_SA_PASSWORD` no serviço `sqlserver`.
 
-1. Abra o projeto no VS Code.
+A aplicação lê as variáveis abaixo:
 
-2. Pressione `F1` e selecione **Dev Containers: Reopen in Container**.
-3. O VS Code utilizará o `docker-compose.yml`, subindo automaticamente `sqlserver` e `api`.
-4. Dentro do container, os scripts `npm run dev` (hot reload via nodemon) e `npm start` estão disponíveis.
+| Variável         | Descrição                                            | Valor padrão              |
+|------------------|------------------------------------------------------|---------------------------|
+| `PORT`           | Porta HTTP da API                                    | `3000`                    |
+| `DB_HOST`        | Hostname do SQL Server                               | `sqlserver`               |
+| `DB_USER`        | Usuário do SQL Server                                | `sa`                      |
+| `DB_PASSWORD`    | Senha do SQL Server                                  | `YourStrong@Passw0rd`     |
+| `DB_NAME`        | Banco de dados utilizado pela aplicação              | `ClientesDb`              |
 
-## Scripts npm
+## Estrutura do projeto
 
-- `npm run dev`: executa a API com `nodemon` para recarregamento automático.
-- `npm start`: executa a API em modo padrão.
+```
+.
+├── Dockerfile               # Imagem Node.js 22 da API
+├── docker-compose.yml       # Orquestração da API, SQL Server e carga inicial
+├── README.md
+├── sql
+│   ├── init.sql             # Cria banco/tabela e insere dados iniciais
+│   └── init-db.sh           # Script executado pelo container db-init
+├── src
+│   ├── app.js               # Configuração do Express e rotas principais
+│   ├── config.js            # Carrega variáveis de ambiente
+│   ├── db.js                # Conexão e consultas ao SQL Server
+│   ├── routes
+│   │   └── clients.js       # Endpoint GET /clients
+│   └── server.js            # Bootstrap da aplicação
+└── swagger
+    └── swagger.yaml         # Definição OpenAPI da API
+```
 
+## Consultando clientes
 
-## Banco de dados SQL Server
+Após iniciar os serviços, faça uma requisição HTTP para obter todos os clientes:
 
-O script `sql/init.sql` cria a base `ClientCatalog`, a tabela `Clients` e insere três registros de
-exemplo. Ajuste o script conforme necessário para o seu domínio.
+```bash
+curl http://localhost:3000/clients
+```
 
+Resposta de exemplo:
 
-## Estrutura de pastas
+```json
+[
+  {
+    "ClientId": 1,
+    "Name": "Maria Silva",
+    "Email": "maria.silva@example.com",
+    "Phone": "+55 11 98888-1111",
+    "CreatedAt": "2024-01-01T12:00:00.000Z"
+  }
+]
+```
 
-
-
+A documentação completa com a especificação OpenAPI está acessível em `/docs`.

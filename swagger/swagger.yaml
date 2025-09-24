@@ -1,0 +1,55 @@
+openapi: 3.0.3
+info:
+  title: API de Clientes
+  description: API para consulta de clientes armazenados no SQL Server 2022.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /clients:
+    get:
+      summary: Lista todos os clientes
+      description: Retorna a lista de clientes cadastrados na base de dados.
+      tags:
+        - Clientes
+      responses:
+        '200':
+          description: Lista de clientes retornada com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+        '500':
+          description: Erro interno do servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    Client:
+      type: object
+      properties:
+        ClientId:
+          type: integer
+          format: int32
+          example: 1
+        Name:
+          type: string
+          example: Maria Silva
+        Email:
+          type: string
+          format: email
+          example: maria.silva@example.com
+        Phone:
+          type: string
+          example: '+55 11 99999-0000'
+        CreatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00Z'

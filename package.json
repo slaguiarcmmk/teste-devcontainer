@@ -1,35 +1,32 @@
 {
-  "name": "sqlserver-api-template",
+  "name": "cliente-api",
   "version": "1.0.0",
-  "description": "Template Node.js REST API that queries SQL Server and exposes Swagger documentation.",
-
-  "type": "commonjs",
+  "description": "API Node.js 22 para consulta de clientes com SQL Server 2022",
   "main": "src/server.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "dev": "NODE_ENV=development nodemon src/server.js"
   },
   "keywords": [
     "node",
-    "express",
     "sqlserver",
     "swagger",
-
-    "devcontainer"
+    "clientes"
   ],
   "author": "",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-
-    "mssql": "^10.0.2",
-    "swagger-ui-express": "^5.0.0"
+    "dotenv": "16.4.5",
+    "express": "4.18.3",
+    "mssql": "10.0.1",
+    "swagger-ui-express": "5.0.0",
+    "yamljs": "0.3.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
-  },
-  "engines": {
-    "node": ">=18"
+    "nodemon": "3.0.2"
   }
 }

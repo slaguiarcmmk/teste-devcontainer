@@ -1,26 +1,24 @@
-const path = require('path');
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 
-const envFile = process.env.ENV_FILE || '.env';
-dotenv.config({ path: path.resolve(process.cwd(), envFile), override: true });
+dotenv.config();
 
 const config = {
-  port: Number(process.env.PORT || 3000),
+  port: process.env.PORT || 3000,
   sql: {
-    user: process.env.SQL_USER || 'sa',
-    password: process.env.SQL_PASSWORD || 'YourStrong!Passw0rd',
-    server: process.env.SQL_SERVER || 'sqlserver',
-    database: process.env.SQL_DATABASE || 'ClientCatalog',
+    server: process.env.DB_HOST || 'sqlserver',
+    user: process.env.DB_USER || 'sa',
+    password: process.env.DB_PASSWORD || 'YourStrong@Passw0rd',
+    database: process.env.DB_NAME || 'ClientesDb',
     options: {
       encrypt: false,
       trustServerCertificate: true
     },
     pool: {
-      max: Number(process.env.SQL_MAX_POOL || 10),
-      min: Number(process.env.SQL_MIN_POOL || 0),
-      idleTimeoutMillis: Number(process.env.SQL_IDLE_TIMEOUT || 30000)
+      max: parseInt(process.env.DB_POOL_MAX ?? '10', 10),
+      min: parseInt(process.env.DB_POOL_MIN ?? '0', 10),
+      idleTimeoutMillis: parseInt(process.env.DB_POOL_IDLE ?? '30000', 10)
     }
   }
 };
 
-module.exports = config;
+export default config;
