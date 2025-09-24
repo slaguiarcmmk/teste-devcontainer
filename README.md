@@ -1,66 +1,49 @@
-# Ambiente Docker in Docker para Coder
 
-Este projeto provê um template completo de workspace Docker in Docker para uso no [Coder](https://coder.com/) com suporte a devcontainers. O ambiente entrega uma API Node.js 22 capaz de consumir simultaneamente SQL Server 2019 (Developer) e MongoDB 6, além de expor documentação via Swagger.
+# Workspace Docker in Docker para Coder
+
+Este template entrega um ambiente básico para workspaces Coder utilizando a estratégia Docker in Docker. O objetivo é fornecer um devcontainer pronto para uso com Docker, Node.js 22 e os serviços de banco de dados solicitados sem cargas de dados ou aplicações pré-configuradas.
 
 ## Componentes
 
-- **Devcontainer** configurado com Docker-in-Docker e Node.js 22 para uso no Visual Studio Code ou `code-server`.
-- **SQL Server 2019 Developer** com base `CoderClients`, tabela `Clients` e dados de exemplo.
-- **MongoDB 6** com base `coder` e usuário `apiuser` para autenticação da API.
-- **API Node.js 22** com autenticação básica e documentação Swagger disponível em `/docs`.
+- **Devcontainer** baseado em Ubuntu 22.04 com Docker Engine, plugin compose e Node.js 22 instalados.
+- **SQL Server 2019 Developer** executando em container, sem dados pré-carregados.
+- **MongoDB 6.0** executando em container, também sem dados iniciais.
 
-## Requisitos de recursos
+## Pré-requisitos
 
-Os limites de recursos são aplicados via `docker-compose.yml`:
+- Um workspace Coder configurado para utilizar o template Docker in Docker.
+- Docker com suporte a containers privilegiados para que o daemon interno seja executado corretamente.
 
-| Serviço    | Memória | CPU |
-|------------|---------|-----|
-| SQL Server | 2 GB    | 1   |
-| MongoDB    | 1 GB    | 0,5 |
-| API        | 1 GB    | 1   |
+## Utilização
 
-> Observação: os limites são respeitados quando suportados pelo runtime Docker local.
-
-## Como usar
-
-1. Abra o repositório no Coder selecionando o template Docker-in-Docker e garantindo o suporte a devcontainer.
-2. Ao inicializar o workspace, o VS Code irá montar o devcontainer definido em `.devcontainer/devcontainer.json`.
-3. Dentro do container de desenvolvimento execute:
+1. Abra o repositório no Coder e permita que o Visual Studio Code (ou code-server) construa o devcontainer definido em `.devcontainer/`.
+2. Dentro do terminal do devcontainer inicialize os bancos de dados conforme necessário:
 
    ```bash
-   docker compose up --build
+   docker compose up -d
    ```
 
-   Este comando iniciará o SQL Server, MongoDB e a API.
+   Este comando provisiona o SQL Server e o MongoDB vazios, prontos para receber dados.
 
-4. Aguarde os logs indicarem que a API está pronta e acesse:
+3. Ajuste as credenciais conforme necessário editando `docker-compose.yml` antes de subir os serviços.
+4. Para encerrar o ambiente:
 
-   - `http://localhost:3000/docs` para visualizar a documentação Swagger.
-   - `http://localhost:3000/api/clients` usando autenticação básica `apiuser` / `apipassword123`.
+   ```bash
+   docker compose down
+   ```
 
-## Estrutura de pastas
+   Os volumes nomeados `sqlserver-data` e `mongodb-data` preservam os dados gerados durante o uso.
 
-```
-.devcontainer/      # Configuração do ambiente de desenvolvimento Docker-in-Docker
-api/                # Código fonte da API Node.js 22
-mongo/init/         # Scripts de inicialização do MongoDB
-sql/init/           # Scripts de inicialização do SQL Server
-```
+## Portas expostas
 
-## Variáveis de ambiente
+| Serviço   | Porta |
+|-----------|-------|
+| SQL Server | 1433 |
+| MongoDB    | 27017 |
 
-As principais variáveis estão definidas em `docker-compose.yml`. Ajuste conforme necessário:
+## Próximos passos sugeridos
 
-- `SQL_PASSWORD` / `MSSQL_SA_PASSWORD`: senha do usuário `sa`.
-- `MONGO_URI`: string de conexão utilizada pela API.
-- `AUTH_COLLECTION`: coleção MongoDB com usuários de autenticação.
+- Criar aplicações Node.js dentro do próprio devcontainer utilizando o runtime pré-instalado.
+- Configurar scripts de seed ou migrações conforme os requisitos da sua aplicação.
+- Adicionar outras ferramentas de desenvolvimento necessárias ao seu fluxo de trabalho.
 
-## Encerramento
-
-Para encerrar os serviços:
-
-```bash
-docker compose down
-```
-
-Isso removerá os containers criados, preservando scripts e código fonte.

@@ -3,7 +3,9 @@ version: "3.9"
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: coder-sqlserver
+    container_name: workspace-sqlserver
+    restart: unless-stopped
+
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "StrongPassword!123"
@@ -11,49 +13,17 @@ services:
     ports:
       - "1433:1433"
     volumes:
-      - ./sql/init:/init
-    command: ["/bin/bash", "/init/entrypoint.sh"]
+      - sqlserver-data:/var/opt/mssql
 
-    healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P StrongPassword!123 -Q 'SELECT 1'"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    mem_limit: 2g
-    cpus: 1.0
-
-  mongo:
-    image: mongo:6
-    container_name: coder-mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+  mongodb:
+    image: mongo:6.0
+    container_name: workspace-mongodb
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
-      - ./mongo/init:/docker-entrypoint-initdb.d:ro
-    mem_limit: 1g
-    cpus: 0.5
+      - mongodb-data:/data/db
 
-  api:
-    build: ./api
-    container_name: coder-api
-    environment:
-      PORT: 3000
-      SQL_SERVER: sqlserver
-      SQL_DATABASE: CoderClients
-      SQL_USER: sa
-      SQL_PASSWORD: StrongPassword!123
-      SQL_ENCRYPT: "false"
-      MONGO_URI: mongodb://root:rootpassword@mongo:27017
-      MONGO_DB: coder
-      AUTH_COLLECTION: users
-    ports:
-      - "3000:3000"
-    depends_on:
-      sqlserver:
-        condition: service_healthy
-      mongo:
-        condition: service_started
-    mem_limit: 1g
-    cpus: 1.0
+volumes:
+  sqlserver-data:
+  mongodb-data:
