@@ -1,8 +1,10 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
+
 # Install Docker Engine and compose plugin so the workspace can run Docker-in-Docker
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+
         ca-certificates \
         curl \
         gnupg \

@@ -13,6 +13,7 @@ services:
     volumes:
       - ./sql/init:/init
     command: ["/bin/bash", "/init/entrypoint.sh"]
+
     healthcheck:
       test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P StrongPassword!123 -Q 'SELECT 1'"]
       interval: 10s
