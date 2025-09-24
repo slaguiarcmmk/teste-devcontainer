@@ -1,5 +1,7 @@
-FROM node:20-alpine
-RUN apk add --no-cache bash
+FROM node:20-bookworm
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends bash \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
 
