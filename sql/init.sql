@@ -1,26 +1,30 @@
-IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'ClientCatalog')
-BEGIN
-    CREATE DATABASE ClientCatalog;
-END;
+USE master;
 GO
-
-USE ClientCatalog;
-GO
-
-IF OBJECT_ID(N'dbo.Clients', N'U') IS NULL
+IF DB_ID(N'ClientesDb') IS NULL
 BEGIN
-    CREATE TABLE dbo.Clients (
-        Id INT IDENTITY(1,1) PRIMARY KEY,
-        Name NVARCHAR(120) NOT NULL,
-        Email NVARCHAR(255) NOT NULL,
-        Document NVARCHAR(32) NOT NULL,
+    CREATE DATABASE ClientesDb;
+END
+GO
+USE ClientesDb;
+GO
+IF OBJECT_ID(N'dbo.Clientes', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Clientes
+    (
+        ClientId INT IDENTITY(1,1) PRIMARY KEY,
+        Name NVARCHAR(200) NOT NULL,
+        Email NVARCHAR(200) NOT NULL,
+        Phone NVARCHAR(50) NULL,
         CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
     );
-
-    INSERT INTO dbo.Clients (Name, Email, Document)
+END
+GO
+IF NOT EXISTS (SELECT 1 FROM dbo.Clientes)
+BEGIN
+    INSERT INTO dbo.Clientes (Name, Email, Phone)
     VALUES
-        ('Alice Johnson', 'alice.johnson@example.com', '12345678901'),
-        ('Bruno Silva', 'bruno.silva@example.com', '98765432100'),
-        ('Carla Souza', 'carla.souza@example.com', '19283746509');
-END;
+        (N'Maria Silva', N'maria.silva@example.com', N'+55 11 98888-1111'),
+        (N'João Oliveira', N'joao.oliveira@example.com', N'+55 21 97777-2222'),
+        (N'Ana Souza', N'ana.souza@example.com', N'+55 31 96666-3333');
+END
 GO

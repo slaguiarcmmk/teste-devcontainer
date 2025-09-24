@@ -1,14 +1,13 @@
-FROM mcr.microsoft.com/devcontainers/javascript-node:20
+FROM node:22-bookworm
 
-WORKDIR /workspace
+WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm install
 
-COPY src ./src
-COPY .env.example ./
+RUN npm install --production
 
-ENV NODE_ENV=production
+COPY . .
+
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]

@@ -1,9 +1,5 @@
 node_modules
-npm-debug.log*
-.env
-.git
-.devcontainer
+npm-debug.log
 Dockerfile*
-.gitignore
-README.md
-sql
+.dockerignore
+.env

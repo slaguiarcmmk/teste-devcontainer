@@ -1,15 +1,20 @@
-const express = require('express');
-const { getClients } = require('../db/sqlClient');
+import { Router } from 'express';
+import { query } from '../db.js';
 
-const router = express.Router();
+const router = Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const clients = await getClients();
-    res.json({ data: clients });
+    const clients = await query(`
+      SELECT ClientId, Name, Email, Phone, CreatedAt
+      FROM dbo.Clientes
+      ORDER BY Name;
+    `);
+
+    res.json(clients);
   } catch (error) {
     next(error);
   }
 });
 
-module.exports = router;
+export default router;
