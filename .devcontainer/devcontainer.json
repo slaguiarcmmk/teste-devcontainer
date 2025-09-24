@@ -1,0 +1,23 @@
+{
+  "name": "Coder Docker-in-Docker Workspace",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "runArgs": ["--privileged"],
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      },
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-node-azure-pack"
+      ]
+    }
+  },
+  "forwardPorts": [1433, 27017],
+  "remoteUser": "vscode"
+}
