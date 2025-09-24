@@ -1,0 +1,33 @@
+{
+  "name": "Node + SQL Server",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "api",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "runServices": [
+    "sqlserver",
+    "api"
+  ],
+  "overrideCommand": true,
+  "postCreateCommand": "npm install",
+  "remoteUser": "node",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "forwardPorts": [
+    3000,
+    1433
+  ]
+}

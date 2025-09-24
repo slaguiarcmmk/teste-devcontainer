@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-service
+    restart: unless-stopped
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      PORT: ${PORT:-3000}
+      SQL_SERVER: sqlserver
+      SQL_USER: ${SQL_USER:-sa}
+      SQL_PASSWORD: ${SQL_PASSWORD:-YourStrong!Passw0rd}
+      SQL_DATABASE: ${SQL_DATABASE:-ClientCatalog}
+      SQL_MAX_POOL: ${SQL_MAX_POOL:-10}
+      SQL_MIN_POOL: ${SQL_MIN_POOL:-0}
+      SQL_IDLE_TIMEOUT: ${SQL_IDLE_TIMEOUT:-30000}
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - .:/workspace
+      - node-modules:/workspace/node_modules
+    command: npm run dev
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SQL_PASSWORD:-YourStrong!Passw0rd}
+    volumes:
+      - sql-data:/var/opt/mssql
+      - ./sql:/usr/src/sql:ro
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test:
+        ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P \"$${MSSQL_SA_PASSWORD}\" -Q \"SELECT 1\""]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    entrypoint: ["/bin/bash", "/usr/src/sql/entrypoint.sh"]
+
+volumes:
+  sql-data:
+  node-modules:
