@@ -1,3 +1,4 @@
+
 # Workspace Docker in Docker para Coder
 
 Este template entrega um ambiente básico para workspaces Coder utilizando a estratégia Docker in Docker. O objetivo é fornecer um devcontainer pronto para uso com Docker, Node.js 22 e os serviços de banco de dados solicitados sem cargas de dados ou aplicações pré-configuradas.
@@ -45,3 +46,4 @@ Este template entrega um ambiente básico para workspaces Coder utilizando a est
 - Criar aplicações Node.js dentro do próprio devcontainer utilizando o runtime pré-instalado.
 - Configurar scripts de seed ou migrações conforme os requisitos da sua aplicação.
 - Adicionar outras ferramentas de desenvolvimento necessárias ao seu fluxo de trabalho.
+

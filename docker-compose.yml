@@ -5,6 +5,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: workspace-sqlserver
     restart: unless-stopped
+
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "StrongPassword!123"
