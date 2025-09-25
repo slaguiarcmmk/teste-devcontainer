@@ -1,15 +1,26 @@
 version: "3.9"
 
 services:
+
+  container-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+        -  ../..:/workspaces:cached
+    network_mode: rede-app
+    
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: workspace-sqlserver
     restart: unless-stopped
+    network_mode: rede-app
 
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "StrongPassword!123"
-      MSSQL_PID: "Developer"
+      MSSQL_PID: "Developer"    
     ports:
       - "1433:1433"
     volumes:
@@ -19,6 +30,7 @@ services:
     image: mongo:6.0
     container_name: workspace-mongodb
     restart: unless-stopped
+    network_mode: rede-app
     ports:
       - "27017:27017"
     volumes:
@@ -27,3 +39,7 @@ services:
 volumes:
   sqlserver-data:
   mongodb-data:
+
+  
+networks: 
+ rede-app:

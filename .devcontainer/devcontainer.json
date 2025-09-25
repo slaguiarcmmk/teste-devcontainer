@@ -1,4 +1,13 @@
+
 {
+  "name": "Ambiente-Sidney",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "container-app",
+  "workspaceFolder": "/workspace/${localWorkspaceFoderBasename}"
+}
+
+
+/* {
   "name": "Coder Docker-in-Docker Workspace",
   "build": {
     "dockerfile": "Dockerfile"
@@ -13,7 +22,7 @@
       "settings": {
         "terminal.integrated.shell.linux": "/bin/bash"
       },
-      "extensions": [
+      "extensions": [ 
         "ms-azuretools.vscode-docker",
         "ms-vscode.vscode-node-azure-pack"
       ]
@@ -22,3 +31,4 @@
   "forwardPorts": [1433, 27017],
   "remoteUser": "vscode"
 }
+ */
