@@ -2,34 +2,34 @@
   "name": "App Node + SQL Server + Mongo",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
-  "runServices": ["sqlserver", "mongo", "app"],
-  "workspaceFolder": "/api",
-  "overrideCommand": false,
-  "shutdownAction": "stopCompose",
+ // "runServices": ["sqlserver", "mongo", "app"],
+   "workspaceFolder": "/api"
+  // "overrideCommand": false,
+  // "shutdownAction": "stopCompose",
 
-  "forwardPorts": [3000, 11433, 27018],
-  "portsAttributes": {
-    "3000": { "label": "App Web" },
-    "11433": { "label": "SQL Server" },
-    "27018": { "label": "MongoDB" }
-  },
+  // "forwardPorts": [3000, 11433, 27018],
+  // "portsAttributes": {
+  //   "3000": { "label": "App Web" },
+  //   "11433": { "label": "SQL Server" },
+  //   "27018": { "label": "MongoDB" }
+  // },
 
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "ms-azuretools.vscode-docker",
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
-      ],
-      "settings": {
-        "editor.formatOnSave": true,
-        "files.eol": "\n"
-      }
-    }
-  },
+  // "customizations": {
+  //   "vscode": {
+  //     "extensions": [
+  //       "ms-azuretools.vscode-docker",
+  //       "dbaeumer.vscode-eslint",
+  //       "esbenp.prettier-vscode"
+  //     ],
+  //     "settings": {
+  //       "editor.formatOnSave": true,
+  //       "files.eol": "\n"
+  //     }
+  //   }
+  // },
 
-  "postCreateCommand": "npm ci || npm install",
-  "remoteEnv": {
-    "NODE_ENV": "development"
-  }
+  // "postCreateCommand": "npm ci || npm install",
+  // "remoteEnv": {
+  //   "NODE_ENV": "development"
+  // }
 }
