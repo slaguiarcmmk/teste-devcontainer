@@ -1,34 +1,35 @@
-
 {
-  "name": "Ambiente-Sidney",
+  "name": "App Node + SQL Server + Mongo",
   "dockerComposeFile": "docker-compose.yml",
-  "service": "container-app",
-  "workspaceFolder": "/workspace/${localWorkspaceFoderBasename}"
-}
+  "service": "app",
+  "runServices": ["sqlserver", "mongo", "app"],
+  "workspaceFolder": "/api",
+  "overrideCommand": false,
+  "shutdownAction": "stopCompose",
 
-
-/* {
-  "name": "Coder Docker-in-Docker Workspace",
-  "build": {
-    "dockerfile": "Dockerfile"
+  "forwardPorts": [3000, 11433, 27018],
+  "portsAttributes": {
+    "3000": { "label": "App Web" },
+    "11433": { "label": "SQL Server" },
+    "27018": { "label": "MongoDB" }
   },
-  "runArgs": ["--privileged"],
-  "features": {
 
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-  },
   "customizations": {
     "vscode": {
-      "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
-      },
-      "extensions": [ 
+      "extensions": [
         "ms-azuretools.vscode-docker",
-        "ms-vscode.vscode-node-azure-pack"
-      ]
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "files.eol": "\n"
+      }
     }
   },
-  "forwardPorts": [1433, 27017],
-  "remoteUser": "vscode"
+
+  "postCreateCommand": "npm ci || npm install",
+  "remoteEnv": {
+    "NODE_ENV": "development"
+  }
 }
- */

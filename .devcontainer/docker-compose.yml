@@ -1,45 +1,70 @@
+# ./docker-compose.yml
 version: "3.9"
 
 services:
-
-  container-app:
+  app:
     build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-        -  ../..:/workspaces:cached
-    network_mode: rede-app
-    
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    container_name: app-node
+    environment:
+      # Preencha via .env ou direto aqui
+      - PORT=3000
+      # Mongo
+      - MONGO_URL=mongodb://mongo:27017/appdb
+      # SQL Server
+      - SQLSERVER_HOST=sqlserver
+      - SQLSERVER_PORT=1433
+      - SQLSERVER_USER=sa
+      - SQLSERVER_PASSWORD=${SA_PASSWORD}
+      - SQLSERVER_DB=master
+    ports:
+      - "3000:3000"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
 
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: workspace-sqlserver
-    restart: unless-stopped
-    network_mode: rede-app
-
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
     environment:
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "StrongPassword!123"
-      MSSQL_PID: "Developer"    
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${SA_PASSWORD}  # mínimo 8+ chars, complexa
+      # (opcionais)
+      # - MSSQL_PID=Developer
+      # - MSSQL_COLLATION=SQL_Latin1_General_CP1_CI_AS
     ports:
-      - "1433:1433"
+      - "11433:1433"   # publica pra fora (evita conflito com host)
     volumes:
-      - sqlserver-data:/var/opt/mssql
-
-  mongodb:
-    image: mongo:6.0
-    container_name: workspace-mongodb
+      - mssql_data:/var/opt/mssql
+      # Se quiser rodar scripts de init com um sidecar, monte ./sql:/sql
+    healthcheck:
+      # Algumas versões trazem o sqlcmd em /opt/mssql-tools18/bin/sqlcmd
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P ${SA_PASSWORD} -C -Q 'SELECT 1' >/dev/null 2>&1 || /opt/mssql-tools/bin/sqlcmd -S localhost -C -U sa -P ${SA_PASSWORD} -Q 'SELECT 1' >/dev/null 2>&1 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
     restart: unless-stopped
-    network_mode: rede-app
+
+  mongo:
+    image: mongo:7
+    container_name: mongo
     ports:
-      - "27017:27017"
+      - "27018:27017" # publica pra fora
     volumes:
-      - mongodb-data:/data/db
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 10s
+    restart: unless-stopped
 
 volumes:
-  sqlserver-data:
-  mongodb-data:
-
-  
-networks: 
- rede-app:
+  mssql_data:
+  mongo_data:
