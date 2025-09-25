@@ -44,8 +44,8 @@ services:
     healthcheck:
       # Algumas versões trazem o sqlcmd em /opt/mssql-tools18/bin/sqlcmd
       test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P ${SA_PASSWORD} -C -Q 'SELECT 1' >/dev/null 2>&1 || /opt/mssql-tools/bin/sqlcmd -S localhost -C -U sa -P ${SA_PASSWORD} -Q 'SELECT 1' >/dev/null 2>&1 || exit 1"]
-      interval: 5s
-      timeout: 3s
+      interval: 125s
+      timeout: 120s
       retries: 30
       start_period: 30s
     restart: unless-stopped
