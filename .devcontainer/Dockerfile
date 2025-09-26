@@ -21,4 +21,4 @@ RUN npm install --production
 COPY api ./
 
 EXPOSE 3000
-CMD ["node", "src/index.js"]
+CMD ["nodemon", "src/index.js"]
