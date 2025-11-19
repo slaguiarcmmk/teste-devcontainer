@@ -7,7 +7,12 @@ const { getClients } = require('./db/sqlClient');
 const { getMongoClient } = require('./db/mongoClient');
 
 const app = express();
+const cors = require('cors');
+const appointmentsRouter = require('./routes/appointments');
+
+app.use(cors());
 app.use(express.json());
+app.use('/api/appointments', appointmentsRouter);
 
 const swaggerDefinition = {
   openapi: '3.0.3',

@@ -21,7 +21,13 @@ async function getAuthCollection() {
   return client.db(config.mongo.db).collection(config.mongo.authCollection);
 }
 
+async function getAppointmentsCollection() {
+  const client = await getMongoClient();
+  return client.db(config.mongo.db).collection('appointments');
+}
+
 module.exports = {
   getMongoClient,
-  getAuthCollection
+  getAuthCollection,
+  getAppointmentsCollection
 };

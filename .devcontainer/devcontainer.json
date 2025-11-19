@@ -2,18 +2,34 @@
   "name": "App Node + SQL Server + Mongo",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
-  "runServices": ["sqlserver", "mongo", "app"],
-  "workspaceFolder": "/api",
+  "runServices": [
+    "sqlserver",
+    "mongo",
+    "app"
+  ],
+  "workspaceFolder": "/workspace",
   "overrideCommand": false,
   "shutdownAction": "stopCompose",
-
-  "forwardPorts": [3000, 11433, 27018],
+  "forwardPorts": [
+    3000,
+    5173,
+    11433,
+    27018
+  ],
   "portsAttributes": {
-    "3000": { "label": "App Web" },
-    "11433": { "label": "SQL Server" },
-    "27018": { "label": "MongoDB" }
+    "3000": {
+      "label": "App Web (API)"
+    },
+    "5173": {
+      "label": "Frontend React"
+    },
+    "11433": {
+      "label": "SQL Server"
+    },
+    "27018": {
+      "label": "MongoDB"
+    }
   },
-
   "customizations": {
     "vscode": {
       "extensions": [
@@ -27,7 +43,6 @@
       }
     }
   },
-
   "postCreateCommand": "npm ci || npm install",
   "remoteEnv": {
     "NODE_ENV": "development"

@@ -13,12 +13,15 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /api
+WORKDIR /workspace
 
-COPY api/package*.json ./
-RUN npm install --production
+COPY api/package*.json ./api/
+COPY web/package*.json ./web/
 
-COPY api ./
+RUN cd api && npm install
+RUN cd web && npm install
 
-EXPOSE 3000
-CMD ["node", "src/index.js"]
+COPY . .
+
+EXPOSE 3000 5173
+CMD ["node", "api/src/index.js"]
